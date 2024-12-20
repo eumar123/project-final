@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remote Marketing Jobs - SEO</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        body {
+            margin: 20px;
+        }
+        .job-card {
+            margin-bottom: 20px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Remote Marketing Jobs - SEO</h1>
+        <div id="job-info" class="row"></div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <script>
+        const apiUrl = 'https://jobicy.com/api/v2/remote-jobs?count=20&geo=usa&industry=marketing&tag=seo';
+
+        async function fetchJobData() {
+            try {
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                displayJobData(data.jobs);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                document.getElementById('job-info').innerHTML = '<p class="text-danger">Failed to load job listings.</p>';
+            }
+        }
+
+        function displayJobData(jobList) {
+            const jobInfoDiv = document.getElementById('job-info');
+            jobList.forEach(job => {
+                const card = `
+                    <div class="col-md-4 job-card">
+                        <div class="card">
+                            <img src="${job.companyLogo}" class="card-img-top" alt="${job.companyName}">
+                            <div class="card-body">
+                                <h5 class="card-title">${job.jobTitle}</h5>
+                                <p class="card-text"><strong>Company:</strong> ${job.companyName}</p>
+                                <p class="card-text"><strong>Location:</strong> ${job.jobGeo}</p>
+                                <p class="card-text">${job.jobExcerpt}</p>
+                                <a href="${job.url}" class="btn btn-primary" target="_blank">View Job</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                jobInfoDiv.innerHTML += card;
+            });
+        }
+
+        fetchJobData();
+    </script>
+    <script src="sw.js"></script>
+</body>
+</html>
